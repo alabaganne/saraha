@@ -1,6 +1,7 @@
 const router = require('express').Router();
+const connection = require('../connection');
 
-router.get('/users', (req, res) => {
+router.get('/', (req, res) => {
 	connection.query('SELECT id, username, email FROM users', function(err, result) {
 		if(err) return res.send(err);
 
@@ -8,7 +9,7 @@ router.get('/users', (req, res) => {
 	})
 });
 
-router.delete('/users/:id/', (req, res) => {
+router.delete('/:id/', (req, res) => {
 	connection.query('DELETE FROM users WHERE id = ' + req.params.id, function(err, result) {
 		if(err) return res.send(err);
 
@@ -16,13 +17,15 @@ router.delete('/users/:id/', (req, res) => {
 	});
 })
 
-router.post('/users', (req, res) => {
+router.post('/', (req, res) => {
 	if(!req.body.email || !req.body.password || !req.body.username) {
 		return res.send('Missing required fields');
 	}
 	// Code to save post in the database
-	connection.query('INSERT INTO users (email, username, studentId, password) VALUES (?, ?, ?, ?)', [req.body.email, req.body.username, req.body.studentId, req.body.password], function(err, result) {
-		if(err) res.send(err);
+	connection.query('INSERT INTO users (email, username, password) VALUES (?, ?, ?)',
+	[req.body.email, req.body.username, req.body.password],
+	function(err, result) {
+		if(err) return res.send(err);
 
 		res.send('User saved');
 	});

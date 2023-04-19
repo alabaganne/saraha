@@ -7,7 +7,6 @@ create table users (
 	id int primary key auto_increment,
 	email varchar(255) not null unique,
 	username varchar(255) not null unique,
-	studentId varchar(10) not null unique,
 	password varchar(255) not null
 );
 
@@ -15,7 +14,7 @@ create table posts (
 	id int primary key auto_increment,
 	text text not null,
 	userId int not null,
-	foreign key (userId) references users (id)
+	foreign key (userId) references users (id) on delete cascade
 );
 
 create table comments (
